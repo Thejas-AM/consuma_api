@@ -90,8 +90,8 @@ curl -X POST http://localhost:8000/sync \
 Queue work and receive result via callback.
 
 ```bash
-curl -X POST http://localhost:8000/async \
-  -H "Content-Type: application/json" \
+curl -X POST  \
+  -H "Content-Typehttp://localhost:8000/async: application/json" \
   -d '{"text": "Hello world", "count": 3, "callback_url": "https://your-server.com/webhook"}'
 ```
 
@@ -145,14 +145,14 @@ A CLI tool for load testing both endpoints with metrics.
 ### Usage
 
 ```bash
-# Test both endpoints with 100 requests at 10 concurrency
-uv run python tools/load_generator.py --requests 100 --concurrency 10 --mode both
+# Test sync endpoint only
+uv run python tools/load_generator.py --requests 100 --concurrency 10 --mode sync
 
-# Test only sync endpoint
-uv run python tools/load_generator.py --requests 500 --concurrency 20 --mode sync
+# Test async endpoint with your callback URL
+uv run python tools/load_generator.py --requests 100 --concurrency 10 --mode async --callback-url https://your-webhook.beeceptor.com
 
-# Test only async endpoint (starts a callback server automatically)
-uv run python tools/load_generator.py --requests 100 --concurrency 10 --mode async
+# Test both endpoints
+uv run python tools/load_generator.py --requests 100 --concurrency 10 --mode both --callback-url https://your-webhook.beeceptor.com
 ```
 
 ### Options
@@ -163,8 +163,7 @@ uv run python tools/load_generator.py --requests 100 --concurrency 10 --mode asy
 | `--requests` | 100 | Total number of requests |
 | `--concurrency` | 10 | Max concurrent requests |
 | `--mode` | both | Endpoints to test: sync, async, both |
-| `--callback-host` | 127.0.0.1 | Host for callback receiver |
-| `--callback-port` | 8888 | Port for callback receiver |
+| `--callback-url` | https://httpbin.org/post | External URL for async callbacks |
 
 ### Sample Output
 
